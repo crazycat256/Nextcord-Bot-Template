@@ -57,7 +57,7 @@ The bot has a built-in `Logger` class that can be used to log messages to the co
 
 ## Creating Cogs
 
-To create a new cog, create a new file in the cogs directory, create a class that inherits from `nextcord.ext.commands.Cog` and a `setup` function that adds the cog to the bot. Then, add your commands, events, and tasks to the cog. Read the [Nextcord cogs documentation](https://docs.nextcord.dev/en/latest/ext/commands/api.html#nextcord.ext.commands.Cog) for more information. Here are some examples:
+To create a new cog, create a new file in the cogs directory, create a class that inherits from `nextcord.ext.commands.Cog` and a `setup` function that adds the cog to the bot. Then, add your commands, events, and tasks to the cog. Read the [Nextcord cogs documentation](https://docs.nextcord.dev/en/latest/ext/commands/api.html#nextcord.ext.commands.Cog) or take a look at the [Nextcord examples](https://github.com/nextcord/nextcord/tree/master/examples) for more information. Here are some examples of cogs:
 
 ### Command
 

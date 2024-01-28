@@ -10,6 +10,13 @@ import os, logging
 
 def main():
     
+    # Create the logs folder if it doesn't exist
+    if not os.path.exists("logs"):
+        os.mkdir("logs")
+        
+    # Create the nextcord debug logger
+    nextcord_logger = Logger("nextcord", "logs/nextcord.log", level=logging.DEBUG, print_level=100)
+    
     # Create the bot
     bot = Bot(intents=nextcord.Intents.all())
     
@@ -21,13 +28,6 @@ def main():
     if not token:
         bot.logger.critical("No token found in the environment variables, please ensure that you have a .env file in the root directory of the project with a TOKEN variable")
         exit(1)
-    
-    # Create the logs folder if it doesn't exist
-    if not os.path.exists("logs"):
-        os.mkdir("logs")
-
-    # Create the nextcord debug logger
-    nextcord_logger = Logger("nextcord", "logs/nextcord.log", level=logging.DEBUG, print_level=100)
 
     # Try to load all the cogs
     for cog in get_cogs():
@@ -35,12 +35,15 @@ def main():
             bot.load_extension(cog)
             bot.logger.debug("Loaded " + cog)
         except Exception as e:
-            bot.logger.warning("Failed to load " + cog + ": " + str(e))
+            bot.logger.error(e)
+            bot.logger.exception(e)
     
+    # Try to run the bot
     try:
-        bot.run(token)
-    except nextcord.LoginFailure:
-        bot.logger.critical("Invalid token, please ensure that the token in the .env file is valid")
+        bot.run("token")
+    except nextcord.LoginFailure as e:
+        bot.logger.critical("Failed to login, please ensure that the token in the .env file is valid")
+        bot.logger.exception(e)
         exit(1)
     
 

@@ -1,2 +1,2 @@
-nextcord==-U
+nextcord
 python-dotenv

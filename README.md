@@ -15,7 +15,7 @@ This is a template for a Discord bot written in Python using the [Nextcord](http
 
 ## Prerequisites
 
-- [Python](https://www.python.org/downloads/) 3.8 or higher
+- [Python](https://www.python.org/downloads/) 3.8 or higher (Note: using the latest version of Python may cause [this installation error](https://stackoverflow.com/q/77710589/18072035), so the easiest way to avoid this is not to use it.)
 - A [bot account](https://docs.nextcord.dev/en/stable/discord.html) and token
 - Basic knowledge of Python and Discord
 

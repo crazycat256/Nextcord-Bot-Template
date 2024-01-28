@@ -1,7 +1,7 @@
 from config import *
 from bot import Bot
-from nextcord import Interaction, PartialInteractionMessage, Message, Embed, ButtonStyle
-from nextcord.ui import View, Item, Button, button
+from nextcord import Interaction, Embed, ButtonStyle, TextInputStyle
+from nextcord.ui import View, Item, Button, Modal, TextInput, button
 
 
 class PageButtons(View):
@@ -32,9 +32,12 @@ class PageButtons(View):
             self.value = 0
         await self.update(interaction)
         
-    @button(label="1/X", style=ButtonStyle.grey, disabled=True)
+    @button(label="1/X", style=ButtonStyle.grey)
     async def page_button(self, button: Button, interaction: Interaction):
-        pass
+        modal = JumpToPageModal(self, len(self.embeds))
+        await interaction.response.send_modal(modal)
+        await modal.wait()
+        
 
     @button(label = ">", style=ButtonStyle.blurple)
     async def forward_button(self, button: Button, interaction: Interaction):
@@ -75,3 +78,37 @@ class PageButtons(View):
             b.disabled = False
 
 
+
+class JumpToPageModal(Modal):
+    
+    def __init__(self, page_buttons: PageButtons, max_value: int):
+        super().__init__("Jump to page", timeout=60)
+        self.page_buttons = page_buttons
+        self.max_value = max_value
+        
+        self.field = TextInput(
+            label="Page number",
+            style=TextInputStyle.short,
+            placeholder="Enter a number between 1 and " + str(max_value),
+            required=True,
+            min_length=1,
+            max_length=len(str(max_value)),
+        )
+        self.add_item(self.field)
+        
+    async def on_error(self, exception: Exception, interaction: Interaction):
+        await self.page_buttons.bot.handle_interaction_error(interaction, exception)
+        
+    async def callback(self, interaction: Interaction):
+        
+        if self.field.value.isdigit():
+            
+            value = int(self.field.value) - 1
+            if value >= 0 and value < self.max_value:
+                
+                self.stop()
+                self.page_buttons.value = value
+                await self.page_buttons.update(interaction)
+            
+    
+    

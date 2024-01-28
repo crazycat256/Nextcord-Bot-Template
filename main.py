@@ -40,7 +40,7 @@ def main():
     
     # Try to run the bot
     try:
-        bot.run("token")
+        bot.run(token)
     except nextcord.LoginFailure as e:
         bot.logger.critical("Failed to login, please ensure that the token in the .env file is valid")
         bot.logger.exception(e)
